@@ -25,6 +25,8 @@ for (const page of pages) {
   check((html.match(/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/g) || []).length === 1, `${page}: invalid AdSense loader count`);
   check((html.match(/googletagmanager\.com\/gtag\/js\?id=G-2X7SC87K5S/g) || []).length === 1, `${page}: invalid Google tag loader count`);
   check((html.match(/gtag\(['"]config['"],\s*['"]G-2X7SC87K5S['"]\)/g) || []).length === 1, `${page}: invalid Google tag config count`);
+  check((html.match(/["']xvw8zrb9of["']/g) || []).length === 1, `${page}: invalid Clarity project ID count`);
+  check((html.match(/https:\/\/www\.clarity\.ms\/tag\//g) || []).length === 1, `${page}: invalid Clarity loader count`);
   check(/<meta name="description" content="[^"]{40,}"/.test(html), `${page}: description is missing or too short`);
   check(/<main[ >]/.test(html) && /<nav[ >]/.test(html) && /<footer[ >]/.test(html), `${page}: landmark is missing`);
 
