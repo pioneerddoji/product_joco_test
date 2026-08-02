@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎲 로또 번호 추천기</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#6a11cb,#2575fc);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    width:90%;
+    max-width:850px;
+    background:white;
+    border-radius:20px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 15px 40px rgba(0,0,0,.3);
+}
+
+h1{
+    color:#333;
+    margin-bottom:10px;
+}
+
+p{
+    color:#666;
+    margin-bottom:25px;
+}
+
+button{
+    background:#ff9800;
+    color:white;
+    border:none;
+    padding:15px 35px;
+    border-radius:10px;
+    font-size:18px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    background:#ff6f00;
+    transform:scale(1.05);
+}
+
+#numbers{
+    margin-top:35px;
+}
+
+.row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.title{
+    width:60px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.ball{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+    animation:pop .4s;
+}
+
+.yellow{background:#fbc02d;color:#333;}
+.blue{background:#1976d2;}
+.red{background:#e53935;}
+.gray{background:#757575;}
+.green{background:#43a047;}
+
+@keyframes pop{
+    from{
+        transform:scale(0);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+.notice{
+    margin-top:25px;
+    font-size:14px;
+    color:#888;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🎲 로또 번호 추천기</h1>
+
+<p>버튼을 누르면 로또 번호 5세트를 추천합니다.</p>
+
+<button onclick="generateLotto()">
+번호 추천받기
+</button>
+
+<div id="numbers"></div>
+
+<div class="notice">
+무작위 번호 추천 서비스입니다.<br>
+당첨을 보장하지 않습니다.
+</div>
+
+</div>
+
+<script>
+
+function getColor(num){
+    if(num<=10) return "yellow";
+    if(num<=20) return "blue";
+    if(num<=30) return "red";
+    if(num<=40) return "gray";
+    return "green";
+}
+
+function generateOneSet(){
+
+    let nums=[];
+
+    while(nums.length<6){
+
+        let n=Math.floor(Math.random()*45)+1;
+
+        if(!nums.includes(n)){
+            nums.push(n);
+        }
+
+    }
+
+    nums.sort(function(a,b){
+        return a-b;
+    });
+
+    return nums;
+}
+
+function generateLotto(){
+
+    const result=document.getElementById("numbers");
+
+    result.innerHTML="";
+
+    for(let i=1;i<=5;i++){
+
+        const row=document.createElement("div");
+        row.className="row";
+
+        const title=document.createElement("div");
+        title.className="title";
+        title.innerHTML=i+"조";
+
+        row.appendChild(title);
+
+        const nums=generateOneSet();
+
+        nums.forEach(function(num){
+
+            const ball=document.createElement("div");
+
+            ball.className="ball "+getColor(num);
+
+            ball.innerHTML=num;
+
+            row.appendChild(ball);
+
+        });
+
+        result.appendChild(row);
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
