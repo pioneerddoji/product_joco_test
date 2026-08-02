@@ -24,6 +24,8 @@ document.documentElement.dataset.theme = savedTheme || (prefersDark ? "dark" : "
     --shadow: rgba(17,24,39,.28);
     --button-start: #ff9800;
     --button-end: #ff6f00;
+    --field-bg: #f8f9fc;
+    --border: #d9dce5;
 }
 
 :root[data-theme="dark"] {
@@ -38,6 +40,8 @@ document.documentElement.dataset.theme = savedTheme || (prefersDark ? "dark" : "
     --shadow: rgba(0,0,0,.48);
     --button-start: #ffad33;
     --button-end: #ff7a00;
+    --field-bg: #242a40;
+    --border: #3d455f;
 }
 
 * {
@@ -53,8 +57,8 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 24px;
+    align-items: flex-start;
+    padding: 88px 24px 40px;
     transition: background .3s ease, color .3s ease;
 }
 
@@ -166,11 +170,79 @@ p { color: var(--muted); margin-bottom: 25px; }
     color: var(--subtle);
 }
 
+.inquiry {
+    margin-top: 36px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: left;
+}
+
+.inquiry-header { margin-bottom: 24px; text-align: center; }
+.inquiry-header h2 { margin-bottom: 8px; color: var(--text); }
+.inquiry-header p { margin: 0; }
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field-full { grid-column: 1 / -1; }
+.field label { color: var(--text); font-size: 14px; font-weight: 700; }
+
+.field input,
+.field textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--field-bg);
+    color: var(--text);
+    padding: 12px 14px;
+    font: inherit;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.field textarea { min-height: 140px; resize: vertical; }
+.field input:focus,
+.field textarea:focus { outline: none; border-color: #ff8500; box-shadow: 0 0 0 3px rgba(255,133,0,.18); }
+
+.consent {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.consent input { width: 18px; height: 18px; margin-top: 1px; accent-color: #ff8500; }
+.form-honeypot { position: absolute; left: -9999px; }
+
+.submit-button {
+    grid-column: 1 / -1;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--button-start), var(--button-end));
+    color: #fff;
+    padding: 14px 22px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .2s ease, filter .2s ease;
+}
+
+.submit-button:hover { filter: brightness(1.06); transform: translateY(-2px); }
+.submit-button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
 @media (max-width: 600px) {
     body { padding: 88px 14px 24px; }
     .container { width: 100%; padding: 30px 18px; }
     .ball { width: 46px; height: 46px; font-size: 18px; }
     .title { width: 100%; font-size: 17px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .field-full, .consent, .submit-button { grid-column: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -197,6 +269,50 @@ p { color: var(--muted); margin-bottom: 25px; }
         무작위 번호 추천 서비스입니다.<br>
         당첨을 보장하지 않습니다.
     </div>
+
+    <section class="inquiry" aria-labelledby="inquiryTitle">
+        <div class="inquiry-header">
+            <h2 id="inquiryTitle">제휴 문의</h2>
+            <p>함께할 아이디어가 있다면 아래 내용을 보내주세요.</p>
+        </div>
+
+        <form action="https://formspree.io/f/xgogjrnb" method="POST">
+            <input type="hidden" name="_subject" value="새 제휴 문의가 도착했습니다">
+            <div class="form-honeypot" aria-hidden="true">
+                <label for="website">웹사이트</label>
+                <input id="website" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="company">회사·단체명</label>
+                    <input id="company" type="text" name="company" autocomplete="organization" placeholder="회사 또는 단체명">
+                </div>
+
+                <div class="field">
+                    <label for="contactName">담당자명 <span aria-hidden="true">*</span></label>
+                    <input id="contactName" type="text" name="name" autocomplete="name" placeholder="담당자 이름" required>
+                </div>
+
+                <div class="field field-full">
+                    <label for="email">이메일 <span aria-hidden="true">*</span></label>
+                    <input id="email" type="email" name="email" autocomplete="email" placeholder="contact@example.com" required>
+                </div>
+
+                <div class="field field-full">
+                    <label for="message">문의 내용 <span aria-hidden="true">*</span></label>
+                    <textarea id="message" name="message" placeholder="제휴 목적과 제안 내용을 작성해 주세요." required></textarea>
+                </div>
+
+                <label class="consent" for="privacyConsent">
+                    <input id="privacyConsent" type="checkbox" name="privacy_consent" value="동의" required>
+                    <span>제휴 문의 회신을 위한 개인정보 수집 및 이용에 동의합니다.</span>
+                </label>
+
+                <button class="submit-button" type="submit">제휴 문의 보내기</button>
+            </div>
+        </form>
+    </section>
 </main>
 
 <script>
