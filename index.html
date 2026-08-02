@@ -1,428 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="google-adsense-account" content="ca-pub-9624604767498126">
-<title>🎱 로또 번호 추천기</title>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9624604767498126"
-     crossorigin="anonymous"></script>
-
-<script>
-const savedTheme = localStorage.getItem("theme");
-const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-document.documentElement.dataset.theme = savedTheme || (prefersDark ? "dark" : "light");
-</script>
-
-<style>
-:root {
-    color-scheme: light;
-    --page-start: #6a11cb;
-    --page-end: #2575fc;
-    --surface: #ffffff;
-    --text: #2b2d31;
-    --muted: #666b75;
-    --subtle: #858b96;
-    --toggle-bg: rgba(255,255,255,.88);
-    --shadow: rgba(17,24,39,.28);
-    --button-start: #ff9800;
-    --button-end: #ff6f00;
-    --field-bg: #f8f9fc;
-    --border: #d9dce5;
-}
-
-:root[data-theme="dark"] {
-    color-scheme: dark;
-    --page-start: #121629;
-    --page-end: #232b48;
-    --surface: #1b2034;
-    --text: #f5f7ff;
-    --muted: #c0c6d4;
-    --subtle: #9ca5b8;
-    --toggle-bg: rgba(27,32,52,.9);
-    --shadow: rgba(0,0,0,.48);
-    --button-start: #ffad33;
-    --button-end: #ff7a00;
-    --field-bg: #242a40;
-    --border: #3d455f;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    background: linear-gradient(135deg, var(--page-start), var(--page-end));
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 88px 24px 40px;
-    transition: background .3s ease, color .3s ease;
-}
-
-.theme-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--toggle-bg);
-    color: var(--text);
-    border: 1px solid rgba(128,128,128,.28);
-    padding: 10px 14px;
-    border-radius: 999px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 8px 24px var(--shadow);
-    backdrop-filter: blur(8px);
-    transition: transform .2s ease, background .3s ease, color .3s ease;
-}
-
-.theme-toggle:hover { transform: translateY(-2px); }
-
-.theme-toggle:focus-visible,
-.generate-button:focus-visible {
-    outline: 3px solid #fff;
-    outline-offset: 3px;
-}
-
-.container {
-    width: 90%;
-    max-width: 850px;
-    background: var(--surface);
-    border-radius: 20px;
-    padding: 40px;
-    text-align: center;
-    box-shadow: 0 15px 40px var(--shadow);
-    transition: background .3s ease, box-shadow .3s ease;
-}
-
-h1 { color: var(--text); margin-bottom: 10px; }
-p { color: var(--muted); margin-bottom: 25px; }
-
-.generate-button {
-    background: linear-gradient(135deg, var(--button-start), var(--button-end));
-    color: white;
-    border: none;
-    padding: 15px 35px;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform .2s ease, filter .2s ease;
-}
-
-.generate-button:hover {
-    filter: brightness(1.06);
-    transform: scale(1.05);
-}
-
-#numbers { margin-top: 35px; }
-
-.row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.title {
-    width: 60px;
-    color: var(--text);
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.ball {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 22px;
-    font-weight: bold;
-    box-shadow: inset 0 -4px 8px rgba(0,0,0,.18);
-    animation: pop .4s;
-}
-
-.yellow { background: #fbc02d; color: #242424; }
-.blue { background: #1976d2; }
-.red { background: #e53935; }
-.gray { background: #757575; }
-.green { background: #43a047; }
-
-@keyframes pop {
-    from { transform: scale(0); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-.notice {
-    margin-top: 25px;
-    font-size: 14px;
-    color: var(--subtle);
-}
-
-.inquiry {
-    margin-top: 36px;
-    padding-top: 32px;
-    border-top: 1px solid var(--border);
-    text-align: left;
-}
-
-.inquiry-header { margin-bottom: 24px; text-align: center; }
-.inquiry-header h2 { margin-bottom: 8px; color: var(--text); }
-.inquiry-header p { margin: 0; }
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-}
-
-.field { display: flex; flex-direction: column; gap: 8px; }
-.field-full { grid-column: 1 / -1; }
-.field label { color: var(--text); font-size: 14px; font-weight: 700; }
-
-.field input,
-.field textarea {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--field-bg);
-    color: var(--text);
-    padding: 12px 14px;
-    font: inherit;
-    transition: border-color .2s ease, box-shadow .2s ease;
-}
-
-.field textarea { min-height: 140px; resize: vertical; }
-.field input:focus,
-.field textarea:focus { outline: none; border-color: #ff8500; box-shadow: 0 0 0 3px rgba(255,133,0,.18); }
-
-.consent {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: flex-start;
-    gap: 9px;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-.consent input { width: 18px; height: 18px; margin-top: 1px; accent-color: #ff8500; }
-.form-honeypot { position: absolute; left: -9999px; }
-
-.submit-button {
-    grid-column: 1 / -1;
-    border: 0;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--button-start), var(--button-end));
-    color: #fff;
-    padding: 14px 22px;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform .2s ease, filter .2s ease;
-}
-
-.submit-button:hover { filter: brightness(1.06); transform: translateY(-2px); }
-.submit-button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
-
-.comments {
-    margin-top: 36px;
-    padding-top: 32px;
-    border-top: 1px solid var(--border);
-    text-align: left;
-}
-
-.comments-header {
-    margin-bottom: 24px;
-    text-align: center;
-}
-
-.comments-header h2 { margin-bottom: 8px; color: var(--text); }
-.comments-header p { margin: 0; }
-#disqus_thread { min-height: 180px; }
-
-@media (max-width: 600px) {
-    body { padding: 88px 14px 24px; }
-    .container { width: 100%; padding: 30px 18px; }
-    .ball { width: 46px; height: 46px; font-size: 18px; }
-    .title { width: 100%; font-size: 17px; }
-    .form-grid { grid-template-columns: 1fr; }
-    .field-full, .consent, .submit-button { grid-column: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        transition: none !important;
-        animation: none !important;
-    }
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="1부터 45까지 중복 없이 6개 번호를 무작위로 생성하고, 로또 확률과 올바른 활용법을 함께 알아보는 무료 번호 도구입니다.">
+  <meta name="google-adsense-account" content="ca-pub-9624604767498126">
+  <meta name="theme-color" content="#5b35d5">
+  <link rel="canonical" href="https://pioneerddoji.github.io/product_joco_test/">
+  <title>번호연구소 | 공정한 로또 번호 생성기와 확률 가이드</title>
+  <script>(function(){var t=localStorage.getItem("theme");document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");})();</script>
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9624604767498126" crossorigin="anonymous"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"번호연구소 로또 번호 생성기","url":"https://pioneerddoji.github.io/product_joco_test/","applicationCategory":"EntertainmentApplication","operatingSystem":"Any","description":"중복 없는 로또 번호 5세트를 무작위로 생성하고 확률 정보를 제공하는 무료 웹 도구","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"}}</script>
 </head>
 <body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="index.html" aria-label="번호연구소 홈"><span class="brand-mark" aria-hidden="true">6</span>번호연구소</a>
+    <div class="nav-wrap"><nav class="site-nav" aria-label="주요 메뉴"><a href="index.html" aria-current="page">홈</a><a href="guide.html">번호 가이드</a><a href="about.html">사이트 소개</a><a href="#contact">문의</a></nav><button class="theme-toggle" type="button" data-theme-toggle aria-label="다크 모드로 전환">🌙</button></div>
+  </div></header>
 
-<button class="theme-toggle" id="themeToggle" type="button" aria-label="다크 모드로 전환">
-    <span id="themeIcon" aria-hidden="true">🌙</span>
-    <span id="themeLabel">다크 모드</span>
-</button>
+  <main id="main" class="site-main">
+    <section class="hero">
+      <p class="eyebrow">무료 · 가입 없음 · 브라우저에서 즉시 생성</p>
+      <h1>예측이 아닌, 공정한 무작위 번호</h1>
+      <p class="hero-copy">번호연구소는 1부터 45까지 중복 없이 6개 번호를 뽑아 5세트를 만듭니다. 특정 번호의 당첨을 약속하지 않으며, 모든 조합의 가능성이 같다는 확률 원칙을 이해하기 쉽게 설명합니다.</p>
+      <div class="hero-actions"><a class="button" href="#generator">번호 생성하기</a><a class="button button-secondary" href="guide.html">확률 가이드 읽기</a></div>
+    </section>
 
-<main class="container">
-    <h1>🎱 로또 번호 추천기</h1>
-    <p>버튼을 누르면 로또 번호 5세트를 추천합니다.</p>
-    <button class="generate-button" type="button" onclick="generateLotto()">번호 추천받기</button>
-    <div id="numbers" aria-live="polite"></div>
-    <div class="notice">
-        무작위 번호 추천 서비스입니다.<br>
-        당첨을 보장하지 않습니다.
+    <div class="trust-row" aria-label="서비스 특징">
+      <div class="trust-item"><strong>8,145,060가지</strong><span>가능한 6개 번호 조합</span></div>
+      <div class="trust-item"><strong>완전 무작위</strong><span>과거 당첨 번호에 기대지 않음</span></div>
+      <div class="trust-item"><strong>개인정보 불필요</strong><span>번호 생성 시 입력·저장 없음</span></div>
     </div>
 
-    <section class="inquiry" aria-labelledby="inquiryTitle">
-        <div class="inquiry-header">
-            <h2 id="inquiryTitle">제휴 문의</h2>
-            <p>함께할 아이디어가 있다면 아래 내용을 보내주세요.</p>
-        </div>
-
-        <form action="https://formspree.io/f/xgogjrnb" method="POST">
-            <input type="hidden" name="_subject" value="새 제휴 문의가 도착했습니다">
-            <div class="form-honeypot" aria-hidden="true">
-                <label for="website">웹사이트</label>
-                <input id="website" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
-            </div>
-
-            <div class="form-grid">
-                <div class="field">
-                    <label for="company">회사·단체명</label>
-                    <input id="company" type="text" name="company" autocomplete="organization" placeholder="회사 또는 단체명">
-                </div>
-
-                <div class="field">
-                    <label for="contactName">담당자명 <span aria-hidden="true">*</span></label>
-                    <input id="contactName" type="text" name="name" autocomplete="name" placeholder="담당자 이름" required>
-                </div>
-
-                <div class="field field-full">
-                    <label for="email">이메일 <span aria-hidden="true">*</span></label>
-                    <input id="email" type="email" name="email" autocomplete="email" placeholder="contact@example.com" required>
-                </div>
-
-                <div class="field field-full">
-                    <label for="message">문의 내용 <span aria-hidden="true">*</span></label>
-                    <textarea id="message" name="message" placeholder="제휴 목적과 제안 내용을 작성해 주세요." required></textarea>
-                </div>
-
-                <label class="consent" for="privacyConsent">
-                    <input id="privacyConsent" type="checkbox" name="privacy_consent" value="동의" required>
-                    <span>제휴 문의 회신을 위한 개인정보 수집 및 이용에 동의합니다.</span>
-                </label>
-
-                <button class="submit-button" type="submit">제휴 문의 보내기</button>
-            </div>
-        </form>
+    <section id="generator" class="section"><div class="section-heading"><h2>로또 번호 생성기</h2><p>버튼을 누를 때마다 서로 다른 번호 6개로 구성된 5개 조합을 새로 만듭니다.</p></div>
+      <div class="panel tool-panel"><button id="generateButton" class="button" type="button">5세트 생성하기</button><div id="numbers" class="numbers" aria-live="polite"><p>아직 번호를 생성하지 않았습니다.</p></div><p class="notice"><strong>알아두세요.</strong> 생성 결과는 재미와 선택 편의를 위한 참고 정보입니다. 당첨 가능성을 높이거나 결과를 예측하지 않으며, 구매 여부와 금액은 스스로 신중하게 결정해야 합니다.</p></div>
     </section>
 
-    <section class="comments" aria-labelledby="commentsTitle">
-        <div class="comments-header">
-            <h2 id="commentsTitle">댓글</h2>
-            <p>의견과 이야기를 자유롭게 남겨주세요.</p>
-        </div>
-        <div id="disqus_thread"></div>
-        <noscript>
-            댓글을 보려면 JavaScript를 활성화해 주세요.
-            <a href="https://disqus.com/?ref_noscript">Disqus에서 댓글 보기</a>
-        </noscript>
+    <section class="section"><div class="section-heading"><h2>어떻게 번호를 만들까요?</h2><p>간단한 과정이지만 결과를 오해하지 않도록 작동 원리까지 투명하게 공개합니다.</p></div>
+      <div class="content-grid">
+        <article class="content-card"><h3>① 범위 안에서 추출</h3><p>브라우저가 1부터 45 사이의 정수를 하나씩 무작위로 선택합니다. 생년월일처럼 사람이 선호하는 범위에 치우치지 않습니다.</p></article>
+        <article class="content-card"><h3>② 중복을 제외</h3><p>이미 뽑힌 번호는 다시 넣지 않습니다. 서로 다른 숫자 6개가 모일 때까지 같은 과정을 반복합니다.</p></article>
+        <article class="content-card"><h3>③ 오름차순 정렬</h3><p>선택된 숫자를 보기 편하게 작은 수부터 정렬합니다. 정렬은 표시 순서만 바꾸며 조합의 확률에는 영향을 주지 않습니다.</p></article>
+      </div>
     </section>
-</main>
 
-<script>
-const themeToggle = document.getElementById("themeToggle");
-const themeIcon = document.getElementById("themeIcon");
-const themeLabel = document.getElementById("themeLabel");
+    <section class="section"><div class="panel"><div class="section-heading"><h2>모든 조합의 1등 확률은 같습니다</h2><p>로또 6/45에서 순서를 고려하지 않고 45개 중 6개를 고르는 경우의 수는 8,145,060입니다.</p></div>
+      <div class="trust-row"><div class="stat"><strong>1 / 8,145,060</strong><span>한 조합이 6개 번호를 모두 맞힐 이론적 가능성</span></div><div class="stat"><strong>6 / 45</strong><span>중복 없이 선택하는 번호 수와 전체 범위</span></div><div class="stat"><strong>0%</strong><span>과거 결과가 다음 추첨 확률을 바꾸는 정도</span></div></div>
+      <p class="callout">연속 숫자, 같은 끝수, 오랫동안 나오지 않은 숫자도 다른 조합과 확률이 같습니다. 과거 빈도는 기록을 설명할 뿐 다음 독립 추첨을 예측하지 못합니다. 자세한 계산과 흔한 오해는 <a href="guide.html">번호 가이드</a>에서 확인하세요.</p>
+    </div></section>
 
-function updateThemeButton() {
-    const isDark = document.documentElement.dataset.theme === "dark";
-    themeIcon.textContent = isDark ? "☀️" : "🌙";
-    themeLabel.textContent = isDark ? "화이트 모드" : "다크 모드";
-    themeToggle.setAttribute("aria-label", isDark ? "화이트 모드로 전환" : "다크 모드로 전환");
-    themeToggle.setAttribute("aria-pressed", String(isDark));
-}
+    <section class="section"><div class="section-heading"><h2>더 정확하게 이해하기</h2><p>도구만 제공하지 않고 판단에 필요한 배경과 운영 원칙을 함께 공개합니다.</p></div>
+      <div class="content-grid">
+        <article class="content-card"><h3>확률과 흔한 오해</h3><p>조합 수 계산, 독립 시행, ‘잘 나오는 번호’가 예측이 아닌 이유를 쉬운 예로 정리했습니다.</p><a class="more" href="guide.html">가이드 읽기 →</a></article>
+        <article class="content-card"><h3>사이트 운영 원칙</h3><p>콘텐츠를 작성하고 검토하는 기준, 외부 서비스 사용 현황과 서비스의 한계를 공개합니다.</p><a class="more" href="about.html">소개 보기 →</a></article>
+        <article class="content-card"><h3>개인정보와 이용 조건</h3><p>Formspree, Disqus, Google 광고 사용 시 처리될 수 있는 정보와 이용자 선택권을 안내합니다.</p><a class="more" href="privacy.html">개인정보처리방침 →</a></article>
+      </div>
+    </section>
 
-themeToggle.addEventListener("click", function () {
-    const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = nextTheme;
-    localStorage.setItem("theme", nextTheme);
-    updateThemeButton();
-});
+    <section class="section"><div class="section-heading"><h2>자주 묻는 질문</h2></div><div class="faq">
+      <details><summary>이 번호로 당첨될 가능성이 더 높아지나요?</summary><p>아니요. 생성기는 특정 조합을 예측하거나 추천하지 않습니다. 가능한 모든 6개 조합은 추첨 전에 같은 확률을 갖습니다.</p></details>
+      <details><summary>생성한 번호가 서버에 저장되나요?</summary><p>번호는 사용자의 브라우저에서 만들어지며 서버로 전송하거나 저장하지 않습니다. 화면을 새로 열면 이전 결과는 유지되지 않습니다.</p></details>
+      <details><summary>번호 공 색상은 무엇을 의미하나요?</summary><p>가독성을 위해 1~10 노랑, 11~20 파랑, 21~30 빨강, 31~40 회색, 41~45 초록으로 표시합니다. 색상은 확률이나 추천도를 뜻하지 않습니다.</p></details>
+      <details><summary>무료로 계속 이용할 수 있나요?</summary><p>현재 번호 생성과 가이드 열람은 무료이며 회원가입도 필요하지 않습니다. 서비스 변경 사항은 이 사이트에 알립니다.</p></details>
+    </div></section>
 
-updateThemeButton();
+    <section id="contact" class="section"><div class="section-heading"><h2>제휴 및 콘텐츠 문의</h2><p>제안 내용을 확인한 뒤 입력한 회신 이메일로 답변드립니다. 단순 번호 생성에는 이메일이 필요하지 않습니다.</p></div>
+      <div class="panel"><form class="form-grid" action="https://formspree.io/f/xgogjrnb" method="post">
+        <div class="field"><label for="company">회사·단체명</label><input id="company" name="company" type="text" autocomplete="organization" placeholder="선택 입력"></div>
+        <div class="field"><label for="name">담당자 이름</label><input id="name" name="name" type="text" autocomplete="name" required></div>
+        <div class="field field-full"><label for="email">회신 이메일</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field field-full"><label for="message">문의 내용</label><textarea id="message" name="message" minlength="10" required placeholder="제안 목적과 내용을 구체적으로 적어 주세요."></textarea></div>
+        <input type="hidden" name="_subject" value="번호연구소 제휴 문의">
+        <label class="honeypot" for="website">비워 두세요</label><input class="honeypot" id="website" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+        <label class="consent"><input type="checkbox" required> <span>문의 처리와 회신을 위해 입력 정보를 Formspree를 통해 전송하는 데 동의합니다. 자세한 내용은 <a href="privacy.html">개인정보처리방침</a>을 확인해 주세요.</span></label>
+        <button class="button" type="submit">문의 보내기</button>
+      </form></div>
+    </section>
 
-function getColor(num) {
-    if (num <= 10) return "yellow";
-    if (num <= 20) return "blue";
-    if (num <= 30) return "red";
-    if (num <= 40) return "gray";
-    return "green";
-}
+    <section class="section"><div class="section-heading"><h2>이용자 의견</h2><p>가이드에 대한 의견과 개선 제안을 남겨 주세요.</p></div><div class="panel comments-panel"><p class="moderation-note">댓글은 공개되며 Disqus 정책이 적용됩니다. 개인정보, 스팸, 불법·유해 콘텐츠 등 <a href="terms.html">운영 원칙</a>을 위반한 게시물은 삭제될 수 있습니다.</p><div id="disqus_thread"></div><script>var disqus_config=function(){this.page.url=location.origin+location.pathname;this.page.identifier="product-joco-test-home";};(function(){var d=document,s=d.createElement("script");s.src="https://joco-test.disqus.com/embed.js";s.setAttribute("data-timestamp",+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>댓글을 보려면 JavaScript를 활성화해 주세요. <a href="https://disqus.com/?ref_noscript">Disqus 제공 댓글</a></noscript></div></section>
+  </main>
 
-function generateOneSet() {
-    const nums = [];
-    while (nums.length < 6) {
-        const number = Math.floor(Math.random() * 45) + 1;
-        if (!nums.includes(number)) nums.push(number);
-    }
-    return nums.sort(function (a, b) { return a - b; });
-}
-
-function generateLotto() {
-    const result = document.getElementById("numbers");
-    result.innerHTML = "";
-
-    for (let index = 1; index <= 5; index += 1) {
-        const row = document.createElement("div");
-        row.className = "row";
-
-        const title = document.createElement("div");
-        title.className = "title";
-        title.textContent = index + "조";
-        row.appendChild(title);
-
-        generateOneSet().forEach(function (number) {
-            const ball = document.createElement("div");
-            ball.className = "ball " + getColor(number);
-            ball.textContent = number;
-            row.appendChild(ball);
-        });
-
-        result.appendChild(row);
-    }
-}
-</script>
-
-<script>
-var disqus_config = function () {
-    this.page.url = window.location.href.split(/[?#]/)[0];
-    this.page.identifier = "product-joco-test-home";
-};
-
-(function () {
-    var documentRef = document;
-    var script = documentRef.createElement("script");
-    script.src = "https://joco-test.disqus.com/embed.js";
-    script.setAttribute("data-timestamp", String(Date.now()));
-    (documentRef.head || documentRef.body).appendChild(script);
-})();
-</script>
+  <footer class="site-footer"><div class="footer-inner"><div class="footer-top"><div><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">6</span>번호연구소</a><p class="footer-copy">무작위 번호 생성과 확률 정보를 제공하는 독립적인 정보 사이트입니다. 복권 판매사 또는 추첨 기관과 관련이 없습니다.</p></div><nav class="footer-links" aria-label="하단 메뉴"><a href="guide.html">번호 가이드</a><a href="about.html">사이트 소개</a><a href="privacy.html">개인정보처리방침</a><a href="terms.html">이용약관</a><a href="#contact">문의</a></nav></div><p class="copyright">© <span data-current-year></span> 번호연구소. All rights reserved.</p></div></footer>
+  <script src="app.js"></script>
 </body>
 </html>
