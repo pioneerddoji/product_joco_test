@@ -3,8 +3,8 @@ import path from "node:path";
 import vm from "node:vm";
 
 const root = path.resolve(import.meta.dirname, "..");
-const pages = ["index.html", "guide.html", "about.html", "privacy.html", "terms.html"];
-const expectedBase = "https://pioneerddoji.github.io/product_joco_test/";
+const pages = ["index.html", "learn.html", "combinations.html", "randomness.html", "guide.html", "about.html", "privacy.html", "terms.html"];
+const expectedBase = "https://pioneerddoji.github.io/";
 const failures = [];
 const titles = new Set();
 const canonicals = new Set();

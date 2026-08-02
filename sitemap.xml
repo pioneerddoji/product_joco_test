@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://pioneerddoji.github.io/product_joco_test/</loc><lastmod>2026-08-02</lastmod><priority>1.0</priority></url>
-  <url><loc>https://pioneerddoji.github.io/product_joco_test/guide.html</loc><lastmod>2026-08-02</lastmod><priority>0.9</priority></url>
-  <url><loc>https://pioneerddoji.github.io/product_joco_test/about.html</loc><lastmod>2026-08-02</lastmod><priority>0.7</priority></url>
-  <url><loc>https://pioneerddoji.github.io/product_joco_test/privacy.html</loc><lastmod>2026-08-02</lastmod><priority>0.5</priority></url>
-  <url><loc>https://pioneerddoji.github.io/product_joco_test/terms.html</loc><lastmod>2026-08-02</lastmod><priority>0.5</priority></url>
+  <url><loc>https://pioneerddoji.github.io/</loc><lastmod>2026-08-02</lastmod><priority>1.0</priority></url>
+  <url><loc>https://pioneerddoji.github.io/guide.html</loc><lastmod>2026-08-02</lastmod><priority>0.9</priority></url>
+  <url><loc>https://pioneerddoji.github.io/learn.html</loc><lastmod>2026-08-02</lastmod><priority>0.9</priority></url>
+  <url><loc>https://pioneerddoji.github.io/combinations.html</loc><lastmod>2026-08-02</lastmod><priority>0.8</priority></url>
+  <url><loc>https://pioneerddoji.github.io/randomness.html</loc><lastmod>2026-08-02</lastmod><priority>0.8</priority></url>
+  <url><loc>https://pioneerddoji.github.io/about.html</loc><lastmod>2026-08-02</lastmod><priority>0.7</priority></url>
+  <url><loc>https://pioneerddoji.github.io/privacy.html</loc><lastmod>2026-08-02</lastmod><priority>0.5</priority></url>
+  <url><loc>https://pioneerddoji.github.io/terms.html</loc><lastmod>2026-08-02</lastmod><priority>0.5</priority></url>
 </urlset>
