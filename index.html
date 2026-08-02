@@ -236,6 +236,22 @@ p { color: var(--muted); margin-bottom: 25px; }
 .submit-button:hover { filter: brightness(1.06); transform: translateY(-2px); }
 .submit-button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 
+.comments {
+    margin-top: 36px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: left;
+}
+
+.comments-header {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.comments-header h2 { margin-bottom: 8px; color: var(--text); }
+.comments-header p { margin: 0; }
+#disqus_thread { min-height: 180px; }
+
 @media (max-width: 600px) {
     body { padding: 88px 14px 24px; }
     .container { width: 100%; padding: 30px 18px; }
@@ -313,6 +329,18 @@ p { color: var(--muted); margin-bottom: 25px; }
             </div>
         </form>
     </section>
+
+    <section class="comments" aria-labelledby="commentsTitle">
+        <div class="comments-header">
+            <h2 id="commentsTitle">댓글</h2>
+            <p>의견과 이야기를 자유롭게 남겨주세요.</p>
+        </div>
+        <div id="disqus_thread"></div>
+        <noscript>
+            댓글을 보려면 JavaScript를 활성화해 주세요.
+            <a href="https://disqus.com/?ref_noscript">Disqus에서 댓글 보기</a>
+        </noscript>
+    </section>
 </main>
 
 <script>
@@ -377,6 +405,21 @@ function generateLotto() {
         result.appendChild(row);
     }
 }
+</script>
+
+<script>
+var disqus_config = function () {
+    this.page.url = window.location.href.split(/[?#]/)[0];
+    this.page.identifier = "product-joco-test-home";
+};
+
+(function () {
+    var documentRef = document;
+    var script = documentRef.createElement("script");
+    script.src = "https://joco-test.disqus.com/embed.js";
+    script.setAttribute("data-timestamp", String(Date.now()));
+    (documentRef.head || documentRef.body).appendChild(script);
+})();
 </script>
 </body>
 </html>
