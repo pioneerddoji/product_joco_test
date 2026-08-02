@@ -23,6 +23,8 @@ for (const page of pages) {
   if (canonical) canonicals.add(canonical);
   check((html.match(/google-adsense-account/g) || []).length === 1, `${page}: invalid AdSense meta count`);
   check((html.match(/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/g) || []).length === 1, `${page}: invalid AdSense loader count`);
+  check((html.match(/googletagmanager\.com\/gtag\/js\?id=G-2X7SC87K5S/g) || []).length === 1, `${page}: invalid Google tag loader count`);
+  check((html.match(/gtag\(['"]config['"],\s*['"]G-2X7SC87K5S['"]\)/g) || []).length === 1, `${page}: invalid Google tag config count`);
   check(/<meta name="description" content="[^"]{40,}"/.test(html), `${page}: description is missing or too short`);
   check(/<main[ >]/.test(html) && /<nav[ >]/.test(html) && /<footer[ >]/.test(html), `${page}: landmark is missing`);
 
